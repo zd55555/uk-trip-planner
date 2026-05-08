@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City - UK Trip 2026</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    .city-hero {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+    .city-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: var(--img-filter);
+    }
+    .city-hero .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--bg) 0%, transparent 60%);
+    }
+    .city-hero .city-title {
+      position: absolute;
+      bottom: 16px;
+      left: var(--page-pad);
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    [data-theme="beatles"] .city-hero .city-title {
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .city-hero .city-meta {
+      position: absolute;
+      bottom: 16px;
+      right: var(--page-pad);
+      font-family: var(--font-meta);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body data-page="cities.html">
+  <header class="top-bar">
+    <a href="cities.html" class="back-btn"><span class="mi">arrow_back</span></a>
+    <h1 id="page-title">City</h1>
+    <span class="creator-badge">Creator</span>
+  </header>
+
+  <div class="budget-bar" id="budget-bar"></div>
+
+  <div class="city-hero" id="city-hero"></div>
+
+  <h2 class="section-header" id="activities-header">Activities</h2>
+  <div id="activity-list"></div>
+
+  <nav class="bottom-nav" id="bottom-nav"></nav>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const cityId = params.get('id');
+    const city = App.getCityById(cityId);
+
+    if (!city) {
+      window.location.href = 'cities.html';
+    } else {
+      document.getElementById('page-title').textContent = city.name;
+      document.title = `${city.name} - UK Trip 2026`;
+
+      document.getElementById('city-hero').innerHTML = `
+        <img src="${city.hero}" alt="${city.name}">
+        <div class="overlay"></div>
+        <div class="city-title">${city.name}</div>
+        <div class="city-meta">${city.days}</div>
+      `;
+
+      document.getElementById('activity-list').innerHTML =
+        city.activities.map(a => App.renderActivityCard(a)).join('');
+    }
+
+    App.init();
+  </script>
+</body>
+</html>

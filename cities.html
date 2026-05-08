@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cities - UK Trip 2026</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body data-page="cities.html">
+  <header class="top-bar">
+    <a href="index.html" class="back-btn"><span class="mi">arrow_back</span></a>
+    <h1>Tour Hub</h1>
+    <span class="creator-badge" id="creator-badge">Creator</span>
+  </header>
+
+  <div class="budget-bar" id="budget-bar"></div>
+
+  <h2 class="section-header">The Setlist</h2>
+  <p class="section-sub">Tap a city to see what's waiting.</p>
+
+  <div id="city-list"></div>
+
+  <nav class="bottom-nav" id="bottom-nav"></nav>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function renderCities() {
+      const list = document.getElementById('city-list');
+      list.innerHTML = TRIP.cities.map(city => `
+        <a href="city.html?id=${city.id}" class="city-card">
+          <img class="city-img" src="${city.hero}" alt="${city.name}" loading="lazy">
+          <div class="city-info">
+            <div class="city-days">${city.days}</div>
+            <div class="city-name">${city.name}</div>
+            <div class="city-tagline">${city.tagline}</div>
+            <div class="city-count">${city.activities.length} activities</div>
+          </div>
+          <div class="arrow"><span class="mi">chevron_right</span></div>
+        </a>
+      `).join('');
+    }
+
+    App.init();
+    renderCities();
+  </script>
+</body>
+</html>

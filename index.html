@@ -4,47 +4,183 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UK Trip 2026</title>
-  <link rel="stylesheet" href="styles/landing.css">
+  <link rel="stylesheet" href="styles/base.css">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0a0a0a">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #0a0a0f;
+      color: #f0f0f0;
+      padding-bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    body::before { display: none; }
+
+    .splash {
+      max-width: 400px;
+      width: 100%;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .hero-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      filter: brightness(0.7) contrast(1.1);
+    }
+
+    .flag { font-size: 2.5rem; margin-bottom: 0.75rem; }
+
+    h1 {
+      font-family: 'Anton', sans-serif;
+      font-size: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      margin-bottom: 0.4rem;
+    }
+
+    .accent {
+      background: linear-gradient(135deg, #ff007a, #00e5ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #888;
+      margin-bottom: 2rem;
+    }
+
+    .vibe-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #555;
+      margin-bottom: 0.75rem;
+    }
+
+    .vibes {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 2rem;
+    }
+
+    .vibe-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: #f0f0f0;
+      border: 1px solid #222;
+      transition: transform 0.1s, border-color 0.2s;
+      cursor: pointer;
+      background: none;
+      text-align: left;
+      width: 100%;
+      font-family: inherit;
+    }
+
+    .vibe-btn:active { transform: scale(0.97); }
+
+    .vibe-btn .vibe-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+      width: 44px;
+      text-align: center;
+    }
+
+    .vibe-btn .vibe-name {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: block;
+    }
+
+    .vibe-btn .vibe-desc {
+      font-size: 0.78rem;
+      color: #888;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .vibe-hp {
+      background: linear-gradient(135deg, #1a1408 0%, #2a1f10 100%);
+      border-color: #3d2b15;
+    }
+
+    .vibe-beatles {
+      background: linear-gradient(135deg, #0f0520 0%, #1a0a30 100%);
+      border-color: #2d1050;
+    }
+
+    .footer-note {
+      font-size: 0.7rem;
+      color: #333;
+      font-family: 'Space Mono', monospace;
+    }
+  </style>
 </head>
 <body>
-  <div class="landing">
-    <div class="hero">
-      <div class="flag-bar">
-        <span class="flag">🇬🇧</span>
-      </div>
-      <h1>Dad & Luciano<br><span class="accent">Take the UK</span></h1>
-      <p class="subtitle">7 days. One island. Zero boring moments.</p>
-      <p class="instruction">Pick a vibe to preview the trip planner:</p>
+  <div class="splash">
+    <img class="hero-img" src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800" alt="London skyline">
+    <div class="flag">🇬🇧</div>
+    <h1>Dad & Luciano<br><span class="accent">Take the UK</span></h1>
+    <p class="subtitle">6 days. Two cities. Zero boring moments.</p>
+
+    <p class="vibe-label">Pick your vibe</p>
+
+    <div class="vibes">
+      <button class="vibe-btn vibe-hp" onclick="chooseVibe('hp')">
+        <span class="vibe-icon">⚡</span>
+        <span>
+          <span class="vibe-name">The Marauder's Map</span>
+          <span class="vibe-desc">Parchment, ink, hidden discoveries</span>
+        </span>
+      </button>
+
+      <button class="vibe-btn vibe-beatles" onclick="chooseVibe('beatles')">
+        <span class="vibe-icon">🎸</span>
+        <span>
+          <span class="vibe-name">The Backstage Pass</span>
+          <span class="vibe-desc">Neon, loud, rock and roll energy</span>
+        </span>
+      </button>
     </div>
 
-    <div class="portals">
-      <a href="theme-a.html" class="portal portal-a">
-        <span class="portal-icon">⚡</span>
-        <span class="portal-name">The Marauder's Map</span>
-        <span class="portal-desc">Parchment, magic, hidden discoveries</span>
-      </a>
-
-      <a href="theme-b.html" class="portal portal-b">
-        <span class="portal-icon">🎸</span>
-        <span class="portal-name">The Backstage Pass</span>
-        <span class="portal-desc">Bold, loud, rock & roll energy</span>
-      </a>
-
-      <a href="theme-c.html" class="portal portal-c">
-        <span class="portal-icon">📱</span>
-        <span class="portal-name">The Feed</span>
-        <span class="portal-desc">Clean, visual, scroll-friendly</span>
-      </a>
-    </div>
-
-    <p class="footer-note">Built by Dad with AI. For real.</p>
+    <p class="footer-note">~$1,275 total for both of us. For real.</p>
   </div>
 
   <script>
+    function chooseVibe(theme) {
+      localStorage.setItem('uk-trip-theme', theme);
+      window.location.href = 'cities.html';
+    }
+
+    if (localStorage.getItem('uk-trip-theme')) {
+      const btn = document.querySelectorAll('.vibe-btn');
+      const saved = localStorage.getItem('uk-trip-theme');
+      btn.forEach(b => {
+        if ((saved === 'hp' && b.classList.contains('vibe-hp')) ||
+            (saved === 'beatles' && b.classList.contains('vibe-beatles'))) {
+          b.style.borderColor = saved === 'hp' ? '#c4a870' : '#ff007a';
+        }
+      });
+    }
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js');
     }

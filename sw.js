@@ -1,4 +1,4 @@
-const CACHE_NAME = 'uk-trip-v1';
+const CACHE_NAME = 'uk-trip-v2';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
@@ -6,18 +6,25 @@ self.addEventListener('install', (e) => {
       cache.addAll([
         '/',
         '/index.html',
-        '/theme-a.html',
-        '/theme-b.html',
-        '/theme-c.html',
+        '/cities.html',
+        '/city.html',
+        '/itinerary.html',
+        '/settings.html',
         '/data.js',
-        '/styles/landing.css',
-        '/styles/theme-a.css',
-        '/styles/theme-b.css',
-        '/styles/theme-c.css'
+        '/app.js',
+        '/styles/base.css'
       ])
     )
   );
   self.skipWaiting();
+});
+
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    )
+  );
 });
 
 self.addEventListener('fetch', (e) => {

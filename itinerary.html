@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Itinerary - UK Trip 2026</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    .total-bar {
+      margin: 0 var(--page-pad) 16px;
+      padding: 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-meta);
+    }
+    .total-bar .total-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .total-bar .total-amount {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--success);
+    }
+    .total-bar .total-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body data-page="itinerary.html">
+  <header class="top-bar">
+    <a href="cities.html" class="back-btn"><span class="mi">arrow_back</span></a>
+    <h1>Itinerary</h1>
+    <span class="creator-badge">Creator</span>
+  </header>
+
+  <div class="budget-bar" id="budget-bar"></div>
+
+  <h2 class="section-header">Day by Day</h2>
+  <p class="section-sub">6 days, 2 cities, every pound accounted for.</p>
+
+  <div id="itinerary-list"></div>
+
+  <div class="total-bar" id="total-bar"></div>
+
+  <nav class="bottom-nav" id="bottom-nav"></nav>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function renderItinerary() {
+      const list = document.getElementById('itinerary-list');
+      let runningTotal = 0;
+
+      list.innerHTML = TRIP.itinerary.map(day => {
+        const dayTotal = App.getDayTotal(day);
+        runningTotal += dayTotal;
+        const cityName = TRIP.cities.find(c => c.id === day.city)?.name || day.city;
+        const hasActivities = day.activities.length > 0;
+
+        return `
+          <div class="day-card ${hasActivities ? 'has-activities' : ''}">
+            <div class="day-num">${day.day}</div>
+            <div class="day-content">
+              <div class="day-label">Day ${day.day}</div>
+              <div class="day-title">${day.title}</div>
+              <div class="day-desc">${day.description}</div>
+              <div class="day-cost">£${dayTotal} (~$${Math.round(dayTotal * 1.25)}) for the day</div>
+              <span class="day-city">${cityName}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('total-bar').innerHTML = `
+        <div>
+          <div class="total-label">6-Day Total</div>
+          <div class="total-sub">+ ~$150 buffer for souvenirs</div>
+        </div>
+        <div style="text-align: right">
+          <div class="total-amount">~$${TRIP.budgetBreakdown.allInUSD}</div>
+          <div class="total-sub">of $${TRIP.meta.budget} budget</div>
+        </div>
+      `;
+    }
+
+    App.init();
+    renderItinerary();
+  </script>
+</body>
+</html>
