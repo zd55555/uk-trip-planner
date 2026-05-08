@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Feed - UK Trip 2026</title>
+  <link rel="stylesheet" href="styles/theme-c.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a0f1a">
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back">&larr; Back to Hub</a>
+    <h1>The Feed</h1>
+    <p class="tagline">Swipe through the possibilities.</p>
+  </header>
+
+  <h2 class="section-title">Ideas</h2>
+  <div class="hype-board" id="hype-board"></div>
+
+  <h2 class="section-title">Itinerary</h2>
+  <div class="itinerary">
+    <div class="timeline" id="itinerary"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    function renderHypeBoard() {
+      const board = document.getElementById('hype-board');
+      board.innerHTML = TRIP_DATA.ideas.map((idea, i) => `
+        <div class="idea-card" data-id="${idea.id}">
+          <div class="card-media">
+            <img src="${idea.image}" alt="${idea.title}" loading="lazy">
+            <span class="category-badge">${CATEGORY_ICONS[idea.category]} ${idea.category}</span>
+          </div>
+          <div class="card-body">
+            <h3>${idea.title}</h3>
+            <div class="location">📍 ${idea.location}</div>
+            <p class="description">${idea.description}</p>
+            <div class="meta">
+              <span>⏱ ${idea.duration}</span>
+              <span>💰 ${idea.price}</span>
+            </div>
+            <button class="video-toggle" onclick="toggleVideo(this)">▶ Watch Preview</button>
+            <div class="video-container">
+              <iframe src="${idea.video}" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="actions">
+              <button class="btn-approve" onclick="handleAction(${idea.id}, 'approve')">✓ Yes</button>
+              <button class="btn-reject" onclick="handleAction(${idea.id}, 'reject')">✗ Nah</button>
+              <button class="btn-comment" onclick="toggleComment(${idea.id})">💬</button>
+            </div>
+            <div class="comment-box" id="comment-${idea.id}">
+              <input type="text" placeholder="Thoughts?">
+              <button onclick="submitComment(${idea.id})">Send</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderItinerary() {
+      const timeline = document.getElementById('itinerary');
+      timeline.innerHTML = TRIP_DATA.itinerary.map(day => `
+        <div class="day-card ${day.status}">
+          <div class="day-num">${day.day}</div>
+          <div class="day-content">
+            <div class="day-label">${day.label}</div>
+            <div class="day-title">${day.title}</div>
+            <div class="day-desc">${day.description}</div>
+            <span class="status-tag ${day.status}">${day.status === 'locked' ? 'Confirmed' : day.status === 'open' ? 'Open Slot' : 'Flexible'}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleVideo(btn) {
+      const container = btn.nextElementSibling;
+      container.classList.toggle('open');
+      btn.textContent = container.classList.contains('open') ? '⏹ Hide' : '▶ Watch Preview';
+    }
+
+    function handleAction(id, action) {
+      const card = document.querySelector(`[data-id="${id}"]`);
+      if (action === 'approve') {
+        card.style.borderColor = '#059669';
+        card.style.boxShadow = '0 0 0 2px #05966930';
+      } else {
+        card.style.opacity = '0.3';
+        card.style.borderColor = '#dc2626';
+      }
+      console.log(`[CREATOR] ${action.toUpperCase()}: Idea #${id}`);
+    }
+
+    function toggleComment(id) {
+      document.getElementById(`comment-${id}`).classList.toggle('open');
+    }
+
+    function submitComment(id) {
+      const input = document.querySelector(`#comment-${id} input`);
+      if (input.value.trim()) {
+        console.log(`[CREATOR] COMMENT on Idea #${id}: ${input.value}`);
+        input.value = '';
+        document.getElementById(`comment-${id}`).classList.remove('open');
+      }
+    }
+
+    renderHypeBoard();
+    renderItinerary();
+  </script>
+</body>
+</html>

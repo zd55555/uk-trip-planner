@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UK Trip 2026</title>
+  <link rel="stylesheet" href="styles/landing.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="landing">
+    <div class="hero">
+      <div class="flag-bar">
+        <span class="flag">🇬🇧</span>
+      </div>
+      <h1>Dad & Luciano<br><span class="accent">Take the UK</span></h1>
+      <p class="subtitle">7 days. One island. Zero boring moments.</p>
+      <p class="instruction">Pick a vibe to preview the trip planner:</p>
+    </div>
+
+    <div class="portals">
+      <a href="theme-a.html" class="portal portal-a">
+        <span class="portal-icon">⚡</span>
+        <span class="portal-name">The Marauder's Map</span>
+        <span class="portal-desc">Parchment, magic, hidden discoveries</span>
+      </a>
+
+      <a href="theme-b.html" class="portal portal-b">
+        <span class="portal-icon">🎸</span>
+        <span class="portal-name">The Backstage Pass</span>
+        <span class="portal-desc">Bold, loud, rock & roll energy</span>
+      </a>
+
+      <a href="theme-c.html" class="portal portal-c">
+        <span class="portal-icon">📱</span>
+        <span class="portal-name">The Feed</span>
+        <span class="portal-desc">Clean, visual, scroll-friendly</span>
+      </a>
+    </div>
+
+    <p class="footer-note">Built by Dad with AI. For real.</p>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
+</body>
+</html>
