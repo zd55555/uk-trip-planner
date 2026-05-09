@@ -5,129 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Luciano UK</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0a0a0a">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700&family=EB+Garamond:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#d4c28e">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: #0a0a0f;
-      color: #f0f0f0;
-      min-height: 100vh;
-      min-height: 100dvh;
+    html, body {
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background: #d4c28e;
+    }
+    .map-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      -webkit-font-smoothing: antialiased;
     }
-    .splash {
-      max-width: 400px;
+    .map-container img {
       width: 100%;
-      padding: 2rem 1.5rem;
-      text-align: center;
+      height: 100%;
+      object-fit: contain;
     }
-    .hero-img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 16px;
-      margin-bottom: 1.25rem;
-      filter: brightness(0.7) contrast(1.1);
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background 0.2s;
+      -webkit-tap-highlight-color: transparent;
     }
-    h1 {
-      font-family: 'Anton', sans-serif;
-      font-size: 2.2rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, #ff007a, #00e5ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .hotspot:active {
+      background: rgba(196, 168, 112, 0.3);
     }
-    .portals {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    /* Guitar + record + music notes area (bottom-left, Beatles) */
+    .hotspot-beatles {
+      left: 2%;
+      top: 38%;
+      width: 22%;
+      height: 40%;
+      border-radius: 20%;
     }
-    .portal {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 16px 18px;
-      border-radius: 14px;
-      text-decoration: none;
-      color: #f0f0f0;
-      border: 1px solid #222;
-      transition: transform 0.1s;
-      text-align: left;
+    /* Glasses + wand area (top-right / right side, HP) */
+    .hotspot-hp {
+      right: 2%;
+      top: 8%;
+      width: 20%;
+      height: 50%;
+      border-radius: 20%;
     }
-    .portal:active { transform: scale(0.97); }
-    .portal-icon {
-      font-size: 2rem;
-      flex-shrink: 0;
-      width: 44px;
-      text-align: center;
+    /* Lightning bolt (mid-right, also HP) */
+    .hotspot-hp-bolt {
+      left: 52%;
+      top: 52%;
+      width: 12%;
+      height: 15%;
+      border-radius: 40%;
     }
-    .portal-name {
-      font-family: 'Anton', sans-serif;
-      font-size: 1.05rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      display: block;
+    /* UK land mass (center, itinerary) */
+    .hotspot-map {
+      left: 22%;
+      top: 8%;
+      width: 40%;
+      height: 80%;
+      border-radius: 10%;
+      z-index: 0;
     }
-    .portal-desc {
-      font-size: 0.78rem;
-      color: #888;
-      display: block;
-      margin-top: 2px;
-    }
-    .portal-map {
-      background: linear-gradient(135deg, #1a1408 0%, #2a1f10 100%);
-      border-color: #3d2b15;
-    }
-    .portal-beatles {
-      background: linear-gradient(135deg, #0f0520 0%, #1a0a30 100%);
-      border-color: #2d1050;
-    }
-    .portal-hp {
-      background: linear-gradient(135deg, #0f1a08 0%, #1a2a10 100%);
-      border-color: #2d4015;
+    /* Themed hotspots sit above the land mass */
+    .hotspot-beatles, .hotspot-hp, .hotspot-hp-bolt {
+      z-index: 1;
     }
   </style>
 </head>
 <body>
-  <div class="splash">
-    <img class="hero-img" src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800" alt="London skyline">
-    <h1>Luciano UK</h1>
-
-    <div class="portals">
-      <a href="map.html" class="portal portal-map">
-        <span class="portal-icon">🗺️</span>
-        <span>
-          <span class="portal-name">The Marauder's Map</span>
-          <span class="portal-desc">The full trip, city by city, day by day</span>
-        </span>
-      </a>
-
-      <a href="backstage.html" class="portal portal-beatles">
-        <span class="portal-icon">🎸</span>
-        <span>
-          <span class="portal-name">The Backstage Pass</span>
-          <span class="portal-desc">Everything Beatles</span>
-        </span>
-      </a>
-
-      <a href="wizarding.html" class="portal portal-hp">
-        <span class="portal-icon">⚡</span>
-        <span>
-          <span class="portal-name">The Wizarding World</span>
-          <span class="portal-desc">Everything Harry Potter</span>
-        </span>
-      </a>
-    </div>
+  <div class="map-container">
+    <img src="map-hero.png" alt="Marauder's Map of the UK">
+    <a href="map.html" class="hotspot hotspot-map" aria-label="View full itinerary"></a>
+    <a href="backstage.html" class="hotspot hotspot-beatles" aria-label="Everything Beatles"></a>
+    <a href="wizarding.html" class="hotspot hotspot-hp" aria-label="Everything Harry Potter"></a>
+    <a href="wizarding.html" class="hotspot hotspot-hp-bolt" aria-label="Everything Harry Potter"></a>
   </div>
 
   <script>
