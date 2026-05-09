@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="hp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Marauder's Map - Luciano UK</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    .map-hero {
+      background: var(--bg-card-alt);
+      padding: 24px var(--page-pad) 20px;
+      text-align: center;
+      border-bottom: 2px solid var(--border);
+    }
+    .map-hero h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+    .map-hero .map-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .city-divider {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      padding: 16px var(--page-pad) 8px;
+      color: var(--accent-strong);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .city-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+  </style>
+</head>
+<body data-page="map.html">
+  <header class="top-bar">
+    <a href="index.html" class="back-btn"><span class="mi">arrow_back</span></a>
+    <h1>The Marauder's Map</h1>
+  </header>
+
+  <div class="budget-bar" id="budget-bar"></div>
+
+  <div class="map-hero">
+    <h2>London &rarr; Liverpool</h2>
+    <p class="map-sub">6 days, 2 cities, every pound accounted for</p>
+  </div>
+
+  <div id="map-content"></div>
+
+  <div class="total-bar" id="total-bar" style="margin: 16px; padding: 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); display: flex; justify-content: space-between; align-items: center; font-family: var(--font-meta);"></div>
+
+  <div style="height: 16px;"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function renderMap() {
+      const content = document.getElementById('map-content');
+      let html = '';
+
+      TRIP.cities.forEach(city => {
+        html += `<div class="city-divider">${city.name} (${city.days})</div>`;
+
+        const cityDays = TRIP.itinerary.filter(d => d.city === city.id);
+        cityDays.forEach(day => {
+          const dayTotal = App.getDayTotal(day);
+          const hasActivities = day.activities.length > 0;
+          html += `
+            <div class="day-card ${hasActivities ? 'has-activities' : ''}">
+              <div class="day-num">${day.day}</div>
+              <div class="day-content">
+                <div class="day-label">Day ${day.day}</div>
+                <div class="day-title">${day.title}</div>
+                <div class="day-desc">${day.description}</div>
+                <div class="day-cost">£${dayTotal} (~$${Math.round(dayTotal * 1.25)})</div>
+              </div>
+            </div>
+          `;
+        });
+
+        html += `
+          <a href="city.html?id=${city.id}&from=map" class="city-card" style="margin-top: 4px;">
+            <img class="city-img" src="${city.hero}" alt="${city.name}" loading="lazy">
+            <div class="city-info">
+              <div class="city-name">Explore ${city.name}</div>
+              <div class="city-tagline">${city.tagline}</div>
+              <div class="city-count">${city.activities.length} activities</div>
+            </div>
+            <div class="arrow"><span class="mi">chevron_right</span></div>
+          </a>
+        `;
+      });
+
+      content.innerHTML = html;
+
+      document.getElementById('total-bar').innerHTML = `
+        <div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">6-Day Total</div>
+          <div style="font-size: 0.7rem; color: var(--text-muted);">+ ~$150 buffer</div>
+        </div>
+        <div style="text-align: right">
+          <div style="font-size: 1.1rem; font-weight: 700; color: var(--success);">~$${TRIP.budgetBreakdown.allInUSD}</div>
+          <div style="font-size: 0.7rem; color: var(--text-muted);">of $${TRIP.meta.budget} budget</div>
+        </div>
+      `;
+    }
+
+    App.init();
+    renderMap();
+  </script>
+</body>
+</html>

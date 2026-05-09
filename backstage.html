@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="beatles">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Backstage Pass - Luciano UK</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a0a0f">
+  <style>
+    .lens-hero {
+      background: linear-gradient(135deg, #0e0018 0%, #1a0530 100%);
+      padding: 28px var(--page-pad) 24px;
+      text-align: center;
+      border-bottom: 2px solid var(--border);
+    }
+    .lens-hero .lens-icon { font-size: 2.5rem; margin-bottom: 8px; }
+    .lens-hero h2 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: linear-gradient(135deg, #ff007a, #ff6bb5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .lens-hero .lens-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .city-divider {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 20px var(--page-pad) 8px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .city-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+  </style>
+</head>
+<body data-page="backstage.html">
+  <header class="top-bar">
+    <a href="index.html" class="back-btn"><span class="mi">arrow_back</span></a>
+    <h1>The Backstage Pass</h1>
+    <span class="creator-badge" id="creator-badge">Creator</span>
+  </header>
+
+  <div class="lens-hero">
+    <div class="lens-icon">🎸</div>
+    <h2>Everything Beatles</h2>
+    <p class="lens-sub">Every Beatles thing we're doing, across both cities</p>
+  </div>
+
+  <div id="activities-list"></div>
+
+  <div style="height: 24px;"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function renderBeatlesActivities() {
+      const list = document.getElementById('activities-list');
+      let html = '';
+
+      TRIP.cities.forEach(city => {
+        const beatlesActivities = city.activities.filter(a => a.category === 'beatles');
+        if (beatlesActivities.length === 0) return;
+
+        html += `<div class="city-divider">${city.name}</div>`;
+        beatlesActivities.forEach(a => {
+          html += App.renderActivityCard(a);
+        });
+      });
+
+      if (!html) {
+        html = '<div class="empty-state"><span class="mi">music_off</span>No Beatles activities yet.</div>';
+      }
+
+      list.innerHTML = html;
+    }
+
+    App.init();
+    renderBeatlesActivities();
+  </script>
+</body>
+</html>

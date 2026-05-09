@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="hp">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>City - UK Trip 2026</title>
+  <title>City - Luciano UK</title>
   <link rel="stylesheet" href="styles/base.css">
   <link rel="manifest" href="manifest.json">
   <style>
@@ -32,10 +32,6 @@
       font-weight: 700;
       color: var(--text);
     }
-    [data-theme="beatles"] .city-hero .city-title {
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
     .city-hero .city-meta {
       position: absolute;
       bottom: 16px;
@@ -46,9 +42,9 @@
     }
   </style>
 </head>
-<body data-page="cities.html">
+<body>
   <header class="top-bar">
-    <a href="cities.html" class="back-btn"><span class="mi">arrow_back</span></a>
+    <a id="back-link" href="map.html" class="back-btn"><span class="mi">arrow_back</span></a>
     <h1 id="page-title">City</h1>
     <span class="creator-badge">Creator</span>
   </header>
@@ -57,23 +53,26 @@
 
   <div class="city-hero" id="city-hero"></div>
 
-  <h2 class="section-header" id="activities-header">Activities</h2>
+  <h2 class="section-header">Activities</h2>
   <div id="activity-list"></div>
 
-  <nav class="bottom-nav" id="bottom-nav"></nav>
+  <div style="height: 24px;"></div>
 
   <script src="data.js"></script>
   <script src="app.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
     const cityId = params.get('id');
+    const from = params.get('from') || 'map';
     const city = App.getCityById(cityId);
 
+    document.getElementById('back-link').href = from + '.html';
+
     if (!city) {
-      window.location.href = 'cities.html';
+      window.location.href = 'map.html';
     } else {
       document.getElementById('page-title').textContent = city.name;
-      document.title = `${city.name} - UK Trip 2026`;
+      document.title = `${city.name} - Luciano UK`;
 
       document.getElementById('city-hero').innerHTML = `
         <img src="${city.hero}" alt="${city.name}">

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="hp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Wizarding World - Luciano UK</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#fff9ee">
+  <style>
+    .lens-hero {
+      background: var(--bg-card-alt);
+      padding: 28px var(--page-pad) 24px;
+      text-align: center;
+      border-bottom: 2px solid var(--border);
+    }
+    .lens-hero .lens-icon { font-size: 2.5rem; margin-bottom: 8px; }
+    .lens-hero h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+    }
+    .lens-hero .lens-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-style: italic;
+    }
+    .city-divider {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      padding: 20px var(--page-pad) 8px;
+      color: var(--accent-strong);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .city-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+  </style>
+</head>
+<body data-page="wizarding.html">
+  <header class="top-bar">
+    <a href="index.html" class="back-btn"><span class="mi">arrow_back</span></a>
+    <h1>The Wizarding World</h1>
+    <span class="creator-badge" id="creator-badge">Creator</span>
+  </header>
+
+  <div class="lens-hero">
+    <div class="lens-icon">⚡</div>
+    <h2>Everything Harry Potter</h2>
+    <p class="lens-sub">I solemnly swear that I am up to no good.</p>
+  </div>
+
+  <div id="activities-list"></div>
+
+  <div style="height: 24px;"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function renderHPActivities() {
+      const list = document.getElementById('activities-list');
+      let html = '';
+
+      TRIP.cities.forEach(city => {
+        const hpActivities = city.activities.filter(a => a.category === 'harry-potter');
+        if (hpActivities.length === 0) return;
+
+        html += `<div class="city-divider">${city.name}</div>`;
+        hpActivities.forEach(a => {
+          html += App.renderActivityCard(a);
+        });
+      });
+
+      if (!html) {
+        html = '<div class="empty-state"><span class="mi">auto_fix_high</span>No Harry Potter activities yet.</div>';
+      }
+
+      list.innerHTML = html;
+    }
+
+    App.init();
+    renderHPActivities();
+  </script>
+</body>
+</html>

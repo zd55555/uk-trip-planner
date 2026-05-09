@@ -1,25 +1,7 @@
 const App = {
   init() {
-    this.loadTheme();
     this.loadCreatorMode();
-    this.renderNav();
     this.renderBudgetBar();
-  },
-
-  getTheme() {
-    return localStorage.getItem('uk-trip-theme') || null;
-  },
-
-  setTheme(theme) {
-    localStorage.setItem('uk-trip-theme', theme);
-    document.documentElement.setAttribute('data-theme', theme);
-  },
-
-  loadTheme() {
-    const theme = this.getTheme();
-    if (theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-    }
   },
 
   isCreatorMode() {
@@ -49,23 +31,6 @@ const App = {
     const statuses = JSON.parse(localStorage.getItem('uk-trip-statuses') || '{}');
     statuses[id] = status;
     localStorage.setItem('uk-trip-statuses', JSON.stringify(statuses));
-  },
-
-  renderNav() {
-    const nav = document.getElementById('bottom-nav');
-    if (!nav) return;
-    const page = document.body.dataset.page;
-    const items = [
-      { href: 'cities.html', icon: 'location_city', label: 'Cities' },
-      { href: 'itinerary.html', icon: 'calendar_month', label: 'Itinerary' },
-      { href: 'settings.html', icon: 'tune', label: 'Settings' }
-    ];
-    nav.innerHTML = items.map(item =>
-      `<a href="${item.href}" class="${page === item.href ? 'active' : ''}">
-        <span class="mi">${item.icon}</span>
-        <span>${item.label}</span>
-      </a>`
-    ).join('');
   },
 
   renderBudgetBar() {
