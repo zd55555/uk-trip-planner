@@ -1,4 +1,4 @@
-const CACHE_NAME = 'uk-trip-v4';
+const CACHE_NAME = 'uk-trip-v5';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
@@ -11,6 +11,7 @@ self.addEventListener('install', (e) => {
         '/wizarding.html',
         '/paths.html',
         '/vault.html',
+        '/route.html',
         '/city.html',
         '/data.js',
         '/app.js',
