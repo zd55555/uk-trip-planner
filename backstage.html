@@ -57,9 +57,9 @@
   </header>
 
   <div class="lens-hero">
-    <div class="lens-icon">🎸</div>
+    <div class="lens-icon">&#127928;</div>
     <h2>Everything Beatles</h2>
-    <p class="lens-sub">Every Beatles thing we're doing, across both cities</p>
+    <p class="lens-sub">Every Beatles thing we're doing, across every city</p>
   </div>
 
   <div id="activities-list"></div>
@@ -71,20 +71,30 @@
   <script>
     function renderBeatlesActivities() {
       const list = document.getElementById('activities-list');
-      let html = '';
+      const beatles = getActivitiesByCategory('beatles');
+      if (beatles.length === 0) {
+        list.innerHTML = '<div class="empty-state"><span class="mi">music_off</span>No Beatles activities yet.</div>';
+        return;
+      }
 
-      TRIP.cities.forEach(city => {
-        const beatlesActivities = city.activities.filter(a => a.category === 'beatles');
-        if (beatlesActivities.length === 0) return;
-
-        html += `<div class="city-divider">${city.name}</div>`;
-        beatlesActivities.forEach(a => {
-          html += App.renderActivityCard(a);
-        });
+      // Group by city
+      const cityOrder = ['liverpool'];
+      const byCity = {};
+      beatles.forEach(a => {
+        const city = a.location.includes('Liverpool') ? 'liverpool' : 'other';
+        if (!byCity[city]) byCity[city] = [];
+        byCity[city].push(a);
       });
 
-      if (!html) {
-        html = '<div class="empty-state"><span class="mi">music_off</span>No Beatles activities yet.</div>';
+      let html = '';
+      // Liverpool first
+      if (byCity.liverpool) {
+        html += '<div class="city-divider">Liverpool</div>';
+        byCity.liverpool.forEach(a => { html += App.renderActivityCard(a); });
+      }
+      if (byCity.other) {
+        html += '<div class="city-divider">Other</div>';
+        byCity.other.forEach(a => { html += App.renderActivityCard(a); });
       }
 
       list.innerHTML = html;

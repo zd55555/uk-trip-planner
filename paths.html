@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="hp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choose Your Path - Luciano UK</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#fff9ee">
+  <style>
+    .paths-hero {
+      background: var(--bg-card-alt);
+      padding: 24px var(--page-pad) 20px;
+      text-align: center;
+      border-bottom: 2px solid var(--border);
+    }
+    .paths-hero h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+    .paths-hero .paths-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .path-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px 8px 6px 4px;
+      margin: 12px var(--page-pad);
+      padding: 16px;
+      box-shadow: 2px 3px 8px rgba(0,0,0,0.06);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .path-card:active { transform: scale(0.98); }
+    .path-card.active {
+      border-color: var(--success);
+      box-shadow: 0 0 0 2px var(--success), 2px 3px 8px rgba(0,0,0,0.06);
+    }
+    .path-card .path-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+    .path-card .path-name {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .path-card .path-budget {
+      font-family: var(--font-meta);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .path-card .path-budget.over { color: var(--danger); }
+    .path-card .path-budget.ok { color: var(--success); }
+    .path-card .path-tagline {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+    .path-card .path-detail {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .path-card .path-detail strong {
+      color: var(--text);
+    }
+    .path-card .path-tradeoff {
+      font-size: 0.8rem;
+      color: var(--accent-strong);
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin-top: 10px;
+      line-height: 1.45;
+    }
+    .path-card .path-tradeoff::before { content: "Tradeoff: "; font-weight: 600; }
+    .path-card .path-days {
+      font-family: var(--font-meta);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+    .path-card .select-btn {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      background: var(--accent);
+      color: var(--nav-bg);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .path-card .select-btn:active { opacity: 0.85; }
+    .path-card.active .select-btn {
+      background: var(--success);
+      color: #fff;
+    }
+    .logistics-link {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      margin: 16px var(--page-pad);
+      font-family: var(--font-meta);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+    }
+    .logistics-link:active { background: var(--bg-card-alt); }
+  </style>
+</head>
+<body data-page="paths.html">
+  <header class="top-bar">
+    <a href="map.html" class="back-btn"><span class="mi">arrow_back</span></a>
+    <h1>Choose Your Path</h1>
+  </header>
+
+  <div class="paths-hero">
+    <h2>Three Ways to Do This</h2>
+    <p class="paths-sub">Same trip, different tradeoffs</p>
+  </div>
+
+  <div id="paths-list"></div>
+
+  <a href="vault.html" class="logistics-link">
+    <span class="mi mi-xs">lock</span> Dad's Vault: budget, bookings, logistics
+  </a>
+
+  <div style="height: 24px;"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function renderPaths() {
+      const currentPath = getCurrentPath();
+      const list = document.getElementById('paths-list');
+      let html = '';
+
+      TRIP.paths.forEach(function(p) {
+        const isActive = p.id === currentPath;
+        const overBudget = p.budget > TRIP.meta.budget;
+        html += '<div class="path-card ' + (isActive ? 'active' : '') + '" data-path="' + p.id + '">' +
+          '<div class="path-header">' +
+            '<span class="path-name">Path ' + p.id + ': ' + p.name + '</span>' +
+            '<span class="path-budget ' + (overBudget ? 'over' : 'ok') + '">$' + p.budget + '</span>' +
+          '</div>' +
+          '<div class="path-tagline">' + p.tagline + '</div>' +
+          '<div class="path-detail"><strong>You get:</strong> ' + p.gain + '</div>' +
+          '<div class="path-detail"><strong>You lose:</strong> ' + p.lose + '</div>' +
+          '<div class="path-tradeoff">' + p.tradeoff + '</div>' +
+          '<div class="path-days">' + p.days.length + ' days, ' + p.cities.length + ' cities: ' + p.cities.map(function(c) { return CITY_NAMES[c]; }).join(', ') + '</div>' +
+          '<button class="select-btn" onclick="selectPath(' + p.id + ')">' + (isActive ? '✓ Currently selected' : 'Select this path') + '</button>' +
+        '</div>';
+      });
+
+      list.innerHTML = html;
+    }
+
+    function selectPath(id) {
+      setCurrentPath(id);
+      renderPaths();
+    }
+
+    App.init();
+    renderPaths();
+  </script>
+</body>
+</html>

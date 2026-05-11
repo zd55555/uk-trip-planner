@@ -7,38 +7,20 @@
   <link rel="stylesheet" href="styles/base.css">
   <link rel="manifest" href="manifest.json">
   <style>
-    .city-hero {
-      position: relative;
-      height: 200px;
-      overflow: hidden;
+    .city-header {
+      background: var(--bg-card-alt);
+      padding: 24px var(--page-pad) 20px;
+      border-bottom: 2px solid var(--border);
     }
-    .city-hero img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: var(--img-filter);
-    }
-    .city-hero .overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, var(--bg) 0%, transparent 60%);
-    }
-    .city-hero .city-title {
-      position: absolute;
-      bottom: 16px;
-      left: var(--page-pad);
+    .city-header h2 {
       font-family: var(--font-display);
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--text);
+      font-size: 1.6rem;
+      margin-bottom: 4px;
     }
-    .city-hero .city-meta {
-      position: absolute;
-      bottom: 16px;
-      right: var(--page-pad);
-      font-family: var(--font-meta);
-      font-size: 0.72rem;
+    .city-header .city-sub {
+      font-size: 0.85rem;
       color: var(--text-muted);
+      font-style: italic;
     }
   </style>
 </head>
@@ -49,9 +31,7 @@
     <span class="creator-badge">Creator</span>
   </header>
 
-  <div class="budget-bar" id="budget-bar"></div>
-
-  <div class="city-hero" id="city-hero"></div>
+  <div class="city-header" id="city-header"></div>
 
   <h2 class="section-header">Activities</h2>
   <div id="activity-list"></div>
@@ -61,28 +41,35 @@
   <script src="data.js"></script>
   <script src="app.js"></script>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const cityId = params.get('id');
-    const from = params.get('from') || 'map';
-    const city = App.getCityById(cityId);
+    var params = new URLSearchParams(window.location.search);
+    var cityId = params.get('id');
+    var from = params.get('from') || 'map';
+    var cityName = CITY_NAMES[cityId];
 
     document.getElementById('back-link').href = from + '.html';
 
-    if (!city) {
+    if (!cityName) {
       window.location.href = 'map.html';
     } else {
-      document.getElementById('page-title').textContent = city.name;
-      document.title = `${city.name} - Luciano UK`;
+      document.getElementById('page-title').textContent = cityName;
+      document.title = cityName + ' - Luciano UK';
 
-      document.getElementById('city-hero').innerHTML = `
-        <img src="${city.hero}" alt="${city.name}">
-        <div class="overlay"></div>
-        <div class="city-title">${city.name}</div>
-        <div class="city-meta">${city.days}</div>
-      `;
+      // Find activities in this city
+      var cityActivities = TRIP.activities.filter(function(a) {
+        return a.location.toLowerCase().includes(cityId);
+      });
+
+      // Count days in this city for current path
+      var pathId = getCurrentPath();
+      var path = TRIP.paths.find(function(p) { return p.id === pathId; });
+      var daysHere = path ? path.days.filter(function(d) { return d.city === cityId; }).length : 0;
+
+      document.getElementById('city-header').innerHTML =
+        '<h2>' + cityName + '</h2>' +
+        '<p class="city-sub">' + daysHere + ' day' + (daysHere !== 1 ? 's' : '') + ' here on Path ' + pathId + ', ' + cityActivities.length + ' activities</p>';
 
       document.getElementById('activity-list').innerHTML =
-        city.activities.map(a => App.renderActivityCard(a)).join('');
+        cityActivities.map(function(a) { return App.renderActivityCard(a); }).join('');
     }
 
     App.init();

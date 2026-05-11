@@ -40,6 +40,16 @@
       height: 1px;
       background: var(--border);
     }
+    .path-note {
+      margin: 0 var(--page-pad) 12px;
+      padding: 10px 12px;
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
   </style>
 </head>
 <body data-page="wizarding.html">
@@ -50,7 +60,7 @@
   </header>
 
   <div class="lens-hero">
-    <div class="lens-icon">⚡</div>
+    <div class="lens-icon">&#9889;</div>
     <h2>Everything Harry Potter</h2>
     <p class="lens-sub">I solemnly swear that I am up to no good.</p>
   </div>
@@ -64,21 +74,34 @@
   <script>
     function renderHPActivities() {
       const list = document.getElementById('activities-list');
+      const hp = getActivitiesByCategory('harry-potter');
+      if (hp.length === 0) {
+        list.innerHTML = '<div class="empty-state"><span class="mi">auto_fix_high</span>No Harry Potter activities yet.</div>';
+        return;
+      }
+
+      // Group by location
+      const groups = [
+        { label: 'London', match: s => s.includes('London') || s.includes('Watford') || s.includes('King') || s.includes('Leavesden') },
+        { label: 'Oxford', match: s => s.includes('Oxford') },
+        { label: 'Alnwick', match: s => s.includes('Alnwick') }
+      ];
+
       let html = '';
+      const pathId = getCurrentPath();
 
-      TRIP.cities.forEach(city => {
-        const hpActivities = city.activities.filter(a => a.category === 'harry-potter');
-        if (hpActivities.length === 0) return;
-
-        html += `<div class="city-divider">${city.name}</div>`;
-        hpActivities.forEach(a => {
+      groups.forEach(g => {
+        const items = hp.filter(a => g.match(a.location));
+        if (items.length === 0) return;
+        html += `<div class="city-divider">${g.label}</div>`;
+        items.forEach(a => {
+          // Note if activity is only in certain paths
+          if (!a.inPaths.includes(pathId)) {
+            html += `<div class="path-note">This activity is in Path ${a.inPaths.join(' & ')} only. <a href="paths.html">Compare paths</a>.</div>`;
+          }
           html += App.renderActivityCard(a);
         });
       });
-
-      if (!html) {
-        html = '<div class="empty-state"><span class="mi">auto_fix_high</span>No Harry Potter activities yet.</div>';
-      }
 
       list.innerHTML = html;
     }

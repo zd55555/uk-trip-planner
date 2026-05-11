@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="hp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dad's Vault - Luciano UK</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#fff9ee">
+  <style>
+    .vault-hero {
+      background: var(--bg-card-alt);
+      padding: 24px var(--page-pad) 20px;
+      text-align: center;
+      border-bottom: 2px solid var(--border);
+    }
+    .vault-hero h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+    .vault-hero .vault-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      padding: 20px var(--page-pad) 8px;
+      color: var(--accent-strong);
+    }
+    .budget-table {
+      margin: 0 var(--page-pad) 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px 8px 6px 4px;
+      overflow: hidden;
+      box-shadow: 2px 3px 6px rgba(0,0,0,0.05);
+    }
+    .budget-table .bt-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: var(--bg-card-alt);
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+    .budget-table .bt-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .budget-table .bt-row:last-child { border-bottom: none; }
+    .budget-table .bt-row .bt-item { color: var(--text-secondary); flex: 1; }
+    .budget-table .bt-row .bt-cat {
+      font-family: var(--font-meta);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      width: 70px;
+      flex-shrink: 0;
+    }
+    .budget-table .bt-row .bt-cost {
+      font-family: var(--font-meta);
+      font-weight: 700;
+      color: var(--text);
+      width: 60px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .budget-table .bt-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--bg-card-alt);
+      border-top: 2px solid var(--border);
+      font-weight: 700;
+    }
+    .budget-summary {
+      margin: 0 var(--page-pad) 16px;
+      padding: 12px 14px;
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .booking-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px 8px 6px 4px;
+      margin: 0 var(--page-pad) 8px;
+      padding: 12px 14px;
+      box-shadow: 2px 3px 6px rgba(0,0,0,0.05);
+    }
+    .booking-card.urgent { border-left: 3px solid var(--danger); }
+    .booking-card .bk-what {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .booking-card .bk-when {
+      font-family: var(--font-meta);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .booking-card .bk-notes {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+    .booking-card .bk-urgent-tag {
+      display: inline-block;
+      font-family: var(--font-meta);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--danger);
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .question-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px 8px 6px 4px;
+      margin: 0 var(--page-pad) 8px;
+      padding: 12px 14px;
+      box-shadow: 2px 3px 6px rgba(0,0,0,0.05);
+    }
+    .question-card .oq-q {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .question-card .oq-who {
+      font-family: var(--font-meta);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .question-card .oq-notes {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body data-page="vault.html">
+  <header class="top-bar">
+    <a href="paths.html" class="back-btn"><span class="mi">arrow_back</span></a>
+    <h1>Dad's Vault</h1>
+  </header>
+
+  <div class="vault-hero">
+    <h2>Logistics HQ</h2>
+    <p class="vault-sub">Budget, bookings, and open questions</p>
+  </div>
+
+  <div class="section-title">Budget: Path 1 (detailed)</div>
+  <div class="budget-table" id="budget-table"></div>
+
+  <div class="budget-summary" id="budget-notes"></div>
+
+  <div class="section-title">Booking Timeline</div>
+  <div id="bookings-list"></div>
+
+  <div class="section-title">Open Questions</div>
+  <div id="questions-list"></div>
+
+  <div style="height: 24px;"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function renderVault() {
+      // Budget table (Path 1 detailed breakdown)
+      var bt = document.getElementById('budget-table');
+      var b = TRIP.budget.path1;
+      var rows = '';
+      var runningTotal = 0;
+      b.items.forEach(function(item) {
+        runningTotal += item.usd;
+        rows += '<div class="bt-row">' +
+          '<span class="bt-cat">' + item.category + '</span>' +
+          '<span class="bt-item">' + item.item + '</span>' +
+          '<span class="bt-cost">$' + item.usd + '</span>' +
+        '</div>';
+      });
+      bt.innerHTML = '<div class="bt-header"><span>Path 1 Budget</span><span>$' + b.total + '</span></div>' +
+        rows +
+        '<div class="bt-total"><span>Total</span><span>$' + runningTotal + '</span></div>';
+
+      // Budget notes for paths 2 and 3
+      var notes = document.getElementById('budget-notes');
+      notes.innerHTML = '<strong>Path 2 ($' + TRIP.budget.path2.total + '):</strong> ' + TRIP.budget.path2.note +
+        '<br><br><strong>Path 3 ($' + TRIP.budget.path3.total + '):</strong> ' + TRIP.budget.path3.note;
+
+      // Bookings
+      var bList = document.getElementById('bookings-list');
+      var bHtml = '';
+      TRIP.bookings.forEach(function(b) {
+        bHtml += '<div class="booking-card ' + (b.urgent ? 'urgent' : '') + '">' +
+          (b.urgent ? '<span class="bk-urgent-tag">Do this now</span>' : '') +
+          '<div class="bk-what">' + b.what + '</div>' +
+          '<div class="bk-when">When: ' + b.when + ' | Deadline: ' + b.deadline + '</div>' +
+          '<div class="bk-notes">' + b.notes + '</div>' +
+        '</div>';
+      });
+      bList.innerHTML = bHtml;
+
+      // Open questions
+      var qList = document.getElementById('questions-list');
+      var qHtml = '';
+      TRIP.openQuestions.forEach(function(q) {
+        qHtml += '<div class="question-card">' +
+          '<div class="oq-q">' + q.q + '</div>' +
+          '<div class="oq-who">Decides: ' + q.who + '</div>' +
+          '<div class="oq-notes">' + q.notes + '</div>' +
+        '</div>';
+      });
+      qList.innerHTML = qHtml;
+    }
+
+    App.init();
+    renderVault();
+  </script>
+</body>
+</html>
