@@ -6,84 +6,137 @@
   <title>Luciano UK</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#d4c28e">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       height: 100%;
       height: 100dvh;
-      overflow: hidden;
       background: #d4c28e;
+      overflow-x: hidden;
     }
-    .map-container {
-      position: relative;
-      width: 100%;
-      height: 100%;
+    .page-wrap {
+      min-height: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding-bottom: 56px;
     }
-    .map-container img {
+    .map-wrap {
+      position: relative;
       width: 100%;
-      height: 100%;
-      object-fit: contain;
+      max-width: 800px;
     }
+    .map-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* City hotspots - positioned relative to image */
     .hotspot {
       position: absolute;
-      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      margin-left: -22px;
+      margin-top: -22px;
       border-radius: 50%;
-      transition: background 0.2s;
+      cursor: pointer;
       -webkit-tap-highlight-color: transparent;
+      z-index: 2;
+      text-decoration: none;
     }
-    .hotspot:active {
-      background: rgba(196, 168, 112, 0.3);
+    .hotspot::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      background: rgba(80, 50, 10, 0.25);
+      border: 2px solid rgba(80, 50, 10, 0.5);
+      animation: pulse 2.5s ease-in-out infinite;
     }
-    /* Guitar + record + music notes area (bottom-left, Beatles) */
-    .hotspot-beatles {
-      left: 2%;
-      top: 38%;
-      width: 22%;
-      height: 40%;
-      border-radius: 20%;
+    .hotspot:active::before {
+      background: rgba(80, 50, 10, 0.5);
     }
-    /* Glasses + wand area (top-right / right side, HP) */
-    .hotspot-hp {
-      right: 2%;
-      top: 8%;
-      width: 20%;
-      height: 50%;
-      border-radius: 20%;
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.6; }
     }
-    /* Lightning bolt (mid-right, also HP) */
-    .hotspot-hp-bolt {
-      left: 52%;
-      top: 52%;
-      width: 12%;
-      height: 15%;
-      border-radius: 40%;
+    .hs-alnwick::before { animation-delay: 0.4s; }
+    .hs-liverpool::before { animation-delay: 0.8s; }
+    .hs-oxford::before { animation-delay: 1.2s; }
+    .hs-london::before { animation-delay: 1.6s; }
+    .hs-dover::before { animation-delay: 2.0s; }
+
+    .hs-edinburgh { left: 33.2%; top: 10.3%; }
+    .hs-alnwick   { left: 41.6%; top: 20.5%; }
+    .hs-liverpool { left: 24.7%; top: 40.6%; }
+    .hs-oxford    { left: 34.5%; top: 58.7%; }
+    .hs-london    { left: 46.8%; top: 66.5%; }
+    .hs-dover     { left: 51.4%; top: 75.3%; }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: #2c1810;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      border-top: 1px solid #3d2a1a;
     }
-    /* UK land mass (center, itinerary) */
-    .hotspot-map {
-      left: 22%;
-      top: 8%;
-      width: 40%;
-      height: 80%;
-      border-radius: 10%;
-      z-index: 0;
+    .bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      text-decoration: none;
+      color: #8a7a5a;
+      font-family: system-ui, sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.04em;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: color 0.2s;
     }
-    /* Themed hotspots sit above the land mass */
-    .hotspot-beatles, .hotspot-hp, .hotspot-hp-bolt {
-      z-index: 1;
+    .bottom-nav a.active {
+      color: #c4a870;
+    }
+    .bottom-nav .mi {
+      font-family: 'Material Symbols Outlined';
+      font-size: 22px;
+      line-height: 1;
+      font-weight: normal;
+      font-style: normal;
+      display: inline-block;
     }
   </style>
 </head>
 <body>
-  <div class="map-container">
-    <img src="map-hero.png" alt="Marauder's Map of the UK">
-    <a href="map.html" class="hotspot hotspot-map" aria-label="View full itinerary"></a>
-    <a href="backstage.html" class="hotspot hotspot-beatles" aria-label="Everything Beatles"></a>
-    <a href="wizarding.html" class="hotspot hotspot-hp" aria-label="Everything Harry Potter"></a>
-    <a href="wizarding.html" class="hotspot hotspot-hp-bolt" aria-label="Everything Harry Potter"></a>
+  <div class="page-wrap">
+    <div class="map-wrap">
+      <img src="map-hero.png" alt="Marauder's Map of the UK Trip">
+      <a href="city.html?id=edinburgh&from=index" class="hotspot hs-edinburgh" aria-label="Edinburgh"></a>
+      <a href="city.html?id=alnwick&from=index" class="hotspot hs-alnwick" aria-label="Alnwick Castle"></a>
+      <a href="city.html?id=liverpool&from=index" class="hotspot hs-liverpool" aria-label="Liverpool"></a>
+      <a href="city.html?id=oxford&from=index" class="hotspot hs-oxford" aria-label="Oxford"></a>
+      <a href="city.html?id=london&from=index" class="hotspot hs-london" aria-label="London"></a>
+      <a href="city.html?id=dover&from=index" class="hotspot hs-dover" aria-label="Dover"></a>
+    </div>
   </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="active"><span class="mi">map</span>Map</a>
+    <a href="map.html"><span class="mi">list_alt</span>Itinerary</a>
+    <a href="wizarding.html"><span class="mi">auto_fix_high</span>HP</a>
+    <a href="backstage.html"><span class="mi">music_note</span>Beatles</a>
+    <a href="paths.html"><span class="mi">fork_right</span>Paths</a>
+  </nav>
 
   <script>
     if ('serviceWorker' in navigator) {
